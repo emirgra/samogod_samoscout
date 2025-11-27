@@ -327,9 +327,17 @@ func displayJSONResults(result *orchestrator.ScanResult) {
 }
 
 func writeTXTFile(result *orchestrator.ScanResult, filename string) error {
-	file, err := os.Create(filename)
+	var file *os.File
+	var err error
+	
+	if _, statErr := os.Stat(filename); os.IsNotExist(statErr) {
+		file, err = os.Create(filename)
+	} else {
+		file, err = os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)
+	}
+	
 	if err != nil {
-		return fmt.Errorf("failed to create file: %w", err)
+		return fmt.Errorf("failed to open file: %w", err)
 	}
 	defer file.Close()
 
@@ -343,9 +351,17 @@ func writeTXTFile(result *orchestrator.ScanResult, filename string) error {
 }
 
 func writeJSONFile(result *orchestrator.ScanResult, filename string) error {
-	file, err := os.Create(filename)
+	var file *os.File
+	var err error
+	
+	if _, statErr := os.Stat(filename); os.IsNotExist(statErr) {
+		file, err = os.Create(filename)
+	} else {
+		file, err = os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)
+	}
+	
 	if err != nil {
-		return fmt.Errorf("failed to create file: %w", err)
+		return fmt.Errorf("failed to open file: %w", err)
 	}
 	defer file.Close()
 
